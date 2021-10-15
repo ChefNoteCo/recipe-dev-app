@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialRecipes = require('../../../../sample-data.json');
+const initialRecipes = require('../../../sample-data.json');
 console.log('sample-data', initialRecipes);
 
 const initialState = { all: initialRecipes, recent: [] };

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, Button } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import CurrentIngredientList from '../../components/CurrentIngredientList/CurrentIngredientList';
+import { addRecipe } from '../../state/recipes';
 import { Recipe } from '../../models';
 // import RecipesAPI from '../../data/recipe';
 
 const RecipeForm = ({ navigation }) => {
+  const dispatch = useDispatch();
   let defaultState = Recipe({});
 
   const [draftRecipe, setRecipeState] = useState(defaultState);
@@ -24,12 +27,7 @@ const RecipeForm = ({ navigation }) => {
   };
 
   const saveRecipe = () => {
-    const recipe = new RecipesAPI();
-    recipe.save(draftRecipe);
-
-    const updatedRecipes = Object.assign({}, recipes);
-    updatedRecipes.push(recipe);
-    setRecipes(updatedRecipes);
+    dispatch(addRecipe(draftRecipe));
     navigation.navigate('Home');
   };
 
