@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "name": "Protein Brownie",
+    "prepTimeMin": 10,
+    "cookTimeMin": 5,
+    "ingredients": [
+      {
+        "id": "ing1",
+        "name": "Chocolate Whey Protein",
+        "measurement": "scoop",
+        "quantity": 1
+      },
+      {
+        "id": "ing2",
+        "name": "Chocolate Chips",
+        "measurement": "tbsp",
+        "quantity": 1
+      },
+      {
+        "id": "ing3",
+        "name": "Baking Powder",
+        "measurement": "tsp",
+        "quantity": 1
+      },
+      {
+        "id": "ing4",
+        "name": "Sugar",
+        "measurement": "tbsp",
+        "quantity": 2
+      },
+      {
+        "id": "ing5",
+        "name": "Egg",
+        "measurement": "unit",
+        "quantity": 1
+      }
+    ],
+    "instructions": [
+      {
+        "id": "ins1",
+        "instruction": "Mix all the dry ingredients"
+      },
+      {
+        "id": "ins2",
+        "instruction": "Wisk the egg"
+      },
+      {
+        "id": "ins3",
+        "instruction": "Mix egg into dry ingredients"
+      },
+      {
+        "id": "ins4",
+        "instruction": "Microwave for 2 minutes"
+      }
+    ]
+  }
+]
