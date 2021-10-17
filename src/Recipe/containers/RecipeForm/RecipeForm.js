@@ -3,9 +3,8 @@ import { ScrollView, StyleSheet, Text, TextInput, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import CurrentIngredientList from '../../components/CurrentIngredientList/CurrentIngredientList';
-import { addRecipe } from '../../state/recipes';
+import { saveRecipe } from '../../state/recipes';
 import { Recipe } from '../../models';
-// import RecipesAPI from '../../data/recipe';
 
 const RecipeForm = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,8 +25,8 @@ const RecipeForm = ({ navigation }) => {
     setRecipeState(updatedRecipe);
   };
 
-  const saveRecipe = () => {
-    dispatch(addRecipe(draftRecipe));
+  const saveNewRecipe = () => {
+    dispatch(saveRecipe(draftRecipe));
     navigation.navigate('Home');
   };
 
@@ -47,7 +46,7 @@ const RecipeForm = ({ navigation }) => {
         onPress={() => setIngredientModalVisible(true)}
       />
       <Button title="Cancel" onPress={() => navigation.navigate('Home')} />
-      <Button title="Save" onPress={saveRecipe} />
+      <Button title="Save" onPress={saveNewRecipe} />
       <FindIngredient
         modalVisible={ingredientModalVisible}
         closeModal={setIngredientModalVisible}

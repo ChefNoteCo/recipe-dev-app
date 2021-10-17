@@ -1,7 +1,8 @@
+import { nanoid } from 'nanoid/non-secure';
 import Ingredient from './Ingredient';
 
 const Recipe = ({
-  id = '',
+  id = nanoid(),
   name = '',
   ingredients = [],
   instructions = [],
