@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import recipesData from '../data/recipe';
 // const initialRecipes = require('../../../sample-data.json');
+import { sortAscending, sortDescending } from '../../app/helpers/sortOrder';
 
 const initialState = { loading: true, all: [], recent: [] };
 
@@ -17,7 +18,9 @@ export const fetchAllRecipes = createAsyncThunk(
   'recipes/fetchAllRecipes',
   async () => {
     const recipes = await recipesData.list();
-    return recipes;
+    const sortedRecipes = recipes.sort(sortAscending('name'));
+    console.log('sorted', sortedRecipes);
+    return sortedRecipes;
   }
 );
 

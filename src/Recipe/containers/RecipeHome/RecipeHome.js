@@ -18,18 +18,14 @@ const RecipeHome = ({ navigation }) => {
 
   return (
     <View style={styles.recipeHome}>
-      {hasRecent && (
-        <RecipeList title="Recent Recipes" recipes={recipes.recent} />
-      )}
-      <RecipeList title="All Recipes" recipes={recipes.all} />
+      <RecipeList recipes={recipes.all} navigateFn={navigation.navigate} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   recipeHome: {
-    marginTop: 75,
-    backgroundColor: '#ccc',
+    // backgroundColor: '#ccc',
   },
 });
 
