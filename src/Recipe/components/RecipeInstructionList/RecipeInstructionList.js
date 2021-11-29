@@ -1,10 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 
 export const RecipeInstructionList = ({ instructions }) => {
-  const instructionText = instructions.map(instruction => (
-    <Text>{instruction.description}</Text>
+  const instructionText = instructions.map((instruction, index) => (
+    <Text key={`${instruction.order}_${index}`} style={styles.item}>
+      {instruction.description}
+    </Text>
   ));
   return (
     <View>
@@ -13,3 +15,9 @@ export const RecipeInstructionList = ({ instructions }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  item: {
+    padding: 5,
+  },
+});

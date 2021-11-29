@@ -24,6 +24,10 @@ class RecipesAPI {
     return recipe;
   }
 
+  /**
+   * Provides a custom parser that can be used when requesting data from the data store
+   * @returns { getParse, listParse }
+   */
   static parser() {
     return {
       getParse: (data, args) => {
@@ -34,7 +38,7 @@ class RecipesAPI {
         const filteredRecipes = jsonData.filter(
           value => value.id == requestedId
         );
-        return filteredRecipes[0];
+        return Recipe(filteredRecipes[0]);
       },
       listParse: (data, args) => {
         /* Input shape is { id: Recipe } */
@@ -44,7 +48,7 @@ class RecipesAPI {
           const keys = Object.keys(parsedData);
           const resultsArray = [];
           keys.forEach(key => {
-            resultsArray.push(parsedData[key]);
+            resultsArray.push(Recipe(parsedData[key]));
           });
           return resultsArray;
         } else {

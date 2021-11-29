@@ -1,5 +1,6 @@
 export const sortAscending = attribute => {
   return (firstEl, secondEl) => {
+    console.log('el', firstEl, secondEl);
     const first = attribute ? firstEl[attribute] : firstEl;
     const second = attribute ? secondEl[attribute] : secondEl;
     if (first < second) {
