@@ -7,6 +7,7 @@ import { ThemeProvider } from 'react-native-elements';
 import { Provider } from 'react-redux';
 import { store } from './src/app/state/store';
 import Recipe from './src/Recipe/Recipe';
+import Ingredient from './src/Ingredient/Ingredient';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Tab = createBottomTabNavigator();
@@ -29,8 +30,16 @@ export default function App() {
                   ),
                 }}
               />
-              {/* <Tab.Screen name="NewRecipe" component={RecipeForm} /> */}
-              {/* <Tab.Screen name="RecipeDetail" component={RecipeDetail} /> */}
+              <Tab.Screen
+                name="Ingredients"
+                component={Ingredient}
+                options={{
+                  headerShown: false,
+                  tabBarIcon: ({ color, size }) => (
+                    <Icon name="cart" color={color} size={size} />
+                  ),
+                }}
+              />
             </Tab.Navigator>
             <StatusBar style="auto" />
           </NavigationContainer>
