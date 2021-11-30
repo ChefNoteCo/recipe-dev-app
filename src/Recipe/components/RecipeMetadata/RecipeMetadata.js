@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { RecipeName, RecipeServings, RecipeTime } from './MetadataComponents';
+import { formatTime } from '../../../app/helpers/formatTime';
 
 const RecipeMetadata = ({ recipe }) => {
   // const tabs = [
@@ -18,7 +19,10 @@ const RecipeMetadata = ({ recipe }) => {
     <View style={styles.section}>
       <RecipeName name={recipe.name} />
       <View style={styles.metadata}>
-        <RecipeTime prepTime={recipe.prepTime} cookTime={recipe.cookTime} />
+        <RecipeTime
+          prepTime={formatTime(recipe.prepTime, 'minutes')}
+          cookTime={formatTime(recipe.cookTime, 'minutes')}
+        />
         <RecipeServings servings={recipe.servings} />
       </View>
     </View>

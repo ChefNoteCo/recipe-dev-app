@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, Button } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { Button, Input, Text } from 'react-native-elements';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import CurrentIngredientList from '../../components/CurrentIngredientList/CurrentIngredientList';
 import { saveRecipe } from '../../state/recipes';
@@ -19,48 +20,92 @@ const RecipeForm = ({ navigation }) => {
     setRecipeState(updatedRecipe);
   };
 
-  const updateRecipeMetadata = metadata => {
+  const updateRecipeMetadata = (field, value) => {
     const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe.name = metadata;
+    updatedRecipe[field] = value;
     setRecipeState(updatedRecipe);
   };
 
   const saveNewRecipe = () => {
     dispatch(saveRecipe(draftRecipe));
-    navigation.navigate('Home');
+    navigation.navigate('RecipeList');
   };
 
   return (
-    <ScrollView>
-      <Text>New Recipe</Text>
-      <TextInput
-        value={draftRecipe.name}
-        onChangeText={updateRecipeMetadata}
-        placeholder="Recipe Name"
-        style={styles.metadataInput}
-      />
-      <Text>Ingredients</Text>
-      <CurrentIngredientList ingredients={draftRecipe.ingredients} />
-      <Button
-        title="Add Ingredient"
-        onPress={() => setIngredientModalVisible(true)}
-      />
-      <Button title="Cancel" onPress={() => navigation.navigate('Home')} />
-      <Button title="Save" onPress={saveNewRecipe} />
-      <FindIngredient
-        modalVisible={ingredientModalVisible}
-        closeModal={setIngredientModalVisible}
-        addIngredientFn={addIngredientsToRecipe}
-      />
+    <ScrollView style={styles.inputForm}>
+      <View style={styles.metadataForm}>
+        <Input
+          value={draftRecipe.name}
+          onChangeText={val => updateRecipeMetadata('name', val)}
+          placeholder="Recipe Name"
+        />
+        <Input
+          value={draftRecipe.servings}
+          onChangeText={val => updateRecipeMetadata('servings', val)}
+          placeholder="Servings"
+          keyboardType="number-pad"
+        />
+        <Input
+          value={draftRecipe.prepTime}
+          onChangeText={val => updateRecipeMetadata('prepTime', val)}
+          placeholder="Prep Time (minutes)"
+          keyboardType="number-pad"
+        />
+        <Input
+          value={draftRecipe.cookTime}
+          onChangeText={val => updateRecipeMetadata('cookTime', val)}
+          placeholder="Cook Time (minutes)"
+          keyboardType="number-pad"
+        />
+      </View>
+      <View style={styles.ingredientForm}>
+        <Text h4>Ingredients</Text>
+        <CurrentIngredientList ingredients={draftRecipe.ingredients} />
+        <Button
+          title="Add Ingredient"
+          onPress={() => setIngredientModalVisible(true)}
+          type="clear"
+        />
+        <FindIngredient
+          modalVisible={ingredientModalVisible}
+          closeModal={setIngredientModalVisible}
+          addIngredientFn={addIngredientsToRecipe}
+        />
+      </View>
+      <View style={styles.formButtons}>
+        <Button
+          title="Cancel"
+          onPress={() => navigation.navigate('RecipeList')}
+          style={styles.submitButton}
+        />
+        <Button
+          title="Save"
+          onPress={saveNewRecipe}
+          style={styles.submitButton}
+        />
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  metadataInput: {
+  formButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 25,
+  },
+  ingredientForm: {
+    marginTop: 15,
+  },
+  inputForm: {
     padding: 10,
-    borderWidth: 1,
-    borderColor: 'black',
+  },
+  metadataForm: {
+    marginTop: 10,
+  },
+  submitButton: {
+    width: 150,
   },
 });
 export default RecipeForm;
