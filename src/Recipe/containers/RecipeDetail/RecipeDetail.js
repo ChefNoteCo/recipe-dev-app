@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import RecipeMetadata from '../../components/RecipeMetadata/RecipeMetadata';
 import { RecipeIngredientList } from '../../components/RecipeIngredientList/RecipeIngredientList';
 import { RecipeInstructionList } from '../../components/RecipeInstructionList/RecipeInstructionList';
@@ -12,9 +12,14 @@ const RecipeDetail = ({ navigation, route }) => {
   // Currently state.recipes is an array, not an object so need to get it from storage
   // where it is in the appropriate shape
   const recipeId = route.params.id;
-  console.log('recipes', recipes);
-  const recipeDetail = recipes.all.filter(recipe => recipe.id === recipeId)[0];
+  const recipeDetails = recipes.all.filter(recipe => {
+    return recipe.id === recipeId;
+  });
+  const recipeDetail = recipeDetails[0];
 
+  if (recipes.loading) {
+    return <Text>Loading...</Text>;
+  }
   return (
     <View style={styles.recipeDetail}>
       <RecipeMetadata recipe={recipeDetail} />

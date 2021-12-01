@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Text } from 'react-native-elements';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import IngredientForm from '../../components/IngredientForm/IngredientForm';
+import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import { saveRecipe } from '../../state/recipes';
-import { Ingredient, Recipe } from '../../models';
+import { Ingredient, Instruction, Recipe } from '../../models';
 
 const RecipeForm = ({ navigation }) => {
   const dispatch = useDispatch();
+
   let defaultState = Recipe({});
 
   const [draftRecipe, setRecipeState] = useState(defaultState);
   const [ingredientModalVisible, setIngredientModalVisible] = useState(false);
+  const [instructionFieldFocused, setInstructionFieldFocused] = useState(false);
 
   const addIngredientsToRecipe = selectedIngredient => {
     const updatedRecipe = Object.assign({}, draftRecipe);
@@ -43,17 +46,50 @@ const RecipeForm = ({ navigation }) => {
     setRecipeState(updatedRecipe);
   };
 
+  const updateInstructionOrder = instructions => {
+    const updatedRecipe = Object.assign({}, draftRecipe);
+    updatedRecipe.instructions = instructions.data;
+    setRecipeState(updatedRecipe);
+  };
+
+  const addInstructionToRecipe = instructionText => {
+    const updatedRecipe = Object.assign({}, draftRecipe);
+    const instruction = Instruction({ label: instructionText });
+    updatedRecipe.instructions.push(instruction);
+    setRecipeState(updatedRecipe);
+  };
+
+  const removeInstructionFromRecipe = instructionId => {
+    const updatedRecipe = Object.assign({}, draftRecipe);
+    const instructionIndex = updatedRecipe.instructions.findIndex(
+      i => i.id === instructionId
+    );
+    if (instructionIndex === -1) {
+      return;
+    }
+    updatedRecipe.instructions.splice(instructionIndex, 1);
+    setRecipeState(updatedRecipe);
+  };
+
   const updateRecipeMetadata = (field, value) => {
     const updatedRecipe = Object.assign({}, draftRecipe);
     updatedRecipe[field] = value;
     setRecipeState(updatedRecipe);
   };
 
-  const saveNewRecipe = () => {
-    dispatch(saveRecipe(draftRecipe));
-    navigation.navigate('RecipeList');
+  const handleInstructionFocus = isFocused => {
+    setInstructionFieldFocused(isFocused);
   };
 
+  const saveNewRecipe = () => {
+    dispatch(saveRecipe(draftRecipe)).then(() => {
+      navigation.navigate('RecipeDetail', { id: draftRecipe.id });
+    });
+  };
+
+  const instructionStyle = instructionFieldFocused
+    ? styles.instructionFormOnFocus
+    : styles.instructionForm;
   return (
     <ScrollView style={styles.inputForm}>
       <View style={styles.metadataForm}>
@@ -99,6 +135,17 @@ const RecipeForm = ({ navigation }) => {
           selectedIngredients={draftRecipe.ingredients}
         />
       </View>
+      <View style={instructionStyle}>
+        <Text h4>Instructions</Text>
+        <InstructionForm
+          instructions={draftRecipe.instructions}
+          onDragEnd={updateInstructionOrder}
+          onDelete={removeInstructionFromRecipe}
+          onAdd={addInstructionToRecipe}
+          onFocus={() => handleInstructionFocus(true)}
+          onBlur={() => handleInstructionFocus(false)}
+        />
+      </View>
       <View style={styles.formButtons}>
         <Button
           title="Cancel"
@@ -121,6 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 25,
+    marginBottom: 25,
   },
   ingredientForm: {
     marginTop: 15,
@@ -128,6 +176,13 @@ const styles = StyleSheet.create({
   },
   inputForm: {
     padding: 10,
+  },
+  instructionForm: {
+    padding: 10,
+  },
+  instructionFormOnFocus: {
+    padding: 10,
+    marginBottom: 150,
   },
   metadataForm: {
     marginTop: 10,

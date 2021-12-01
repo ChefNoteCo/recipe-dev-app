@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import MeasurementUnitPicker from '../MeasurementUnitPicker/MeasurementUnitPicker';
 
 const IngredientForm = ({ ingredients, onChange }) => {
@@ -17,7 +17,6 @@ const IngredientForm = ({ ingredients, onChange }) => {
         <View style={styles.unitInput}>
           <MeasurementUnitPicker
             onSelectValue={val => {
-              console.log('value', val);
               onChange(ingredient.id, 'unit', val);
             }}
           />
