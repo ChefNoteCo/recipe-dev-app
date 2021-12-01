@@ -3,9 +3,9 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Text } from 'react-native-elements';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
-import CurrentIngredientList from '../../components/CurrentIngredientList/CurrentIngredientList';
+import IngredientForm from '../../components/IngredientForm/IngredientForm';
 import { saveRecipe } from '../../state/recipes';
-import { Recipe } from '../../models';
+import { Ingredient, Recipe } from '../../models';
 
 const RecipeForm = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -14,9 +14,32 @@ const RecipeForm = ({ navigation }) => {
   const [draftRecipe, setRecipeState] = useState(defaultState);
   const [ingredientModalVisible, setIngredientModalVisible] = useState(false);
 
-  const addIngredientsToRecipe = ingredient => {
+  const addIngredientsToRecipe = selectedIngredient => {
     const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe.ingredients.push(ingredient);
+
+    const alreadySelectedIndex = updatedRecipe.ingredients.findIndex(
+      i => (i.id = selectedIngredient.id)
+    );
+    if (alreadySelectedIndex > -1) {
+      updatedRecipe.ingredients.splice(alreadySelectedIndex, 1);
+    } else {
+      const ingredient = Ingredient(selectedIngredient);
+      updatedRecipe.ingredients.push(ingredient);
+    }
+    setRecipeState(updatedRecipe);
+  };
+
+  const updateIngredientInfo = (ingredientId, field, value) => {
+    if (!value) {
+      return;
+    }
+    const updatedRecipe = Object.assign({}, draftRecipe);
+    const ingredientIndex = updatedRecipe.ingredients.findIndex(
+      i => i.id === ingredientId
+    );
+    if (ingredientIndex > -1) {
+      updatedRecipe.ingredients[ingredientIndex][field] = value;
+    }
     setRecipeState(updatedRecipe);
   };
 
@@ -60,7 +83,10 @@ const RecipeForm = ({ navigation }) => {
       </View>
       <View style={styles.ingredientForm}>
         <Text h4>Ingredients</Text>
-        <CurrentIngredientList ingredients={draftRecipe.ingredients} />
+        <IngredientForm
+          ingredients={draftRecipe.ingredients}
+          onChange={updateIngredientInfo}
+        />
         <Button
           title="Add Ingredient"
           onPress={() => setIngredientModalVisible(true)}
@@ -70,6 +96,7 @@ const RecipeForm = ({ navigation }) => {
           modalVisible={ingredientModalVisible}
           closeModal={setIngredientModalVisible}
           addIngredientFn={addIngredientsToRecipe}
+          selectedIngredients={draftRecipe.ingredients}
         />
       </View>
       <View style={styles.formButtons}>
@@ -97,6 +124,7 @@ const styles = StyleSheet.create({
   },
   ingredientForm: {
     marginTop: 15,
+    padding: 10,
   },
   inputForm: {
     padding: 10,

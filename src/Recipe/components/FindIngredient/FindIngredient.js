@@ -1,8 +1,15 @@
 import React from 'react';
-import { Button, Modal, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button, Overlay } from 'react-native-elements';
 import UserIngredientList from '../UserIngredientList/UserIngredientList';
+import IngredientList from '../../../app/components/IngredientList/IngredientList';
 
-const FindIngredient = ({ addIngredientFn, modalVisible, closeModal }) => {
+const FindIngredient = ({
+  addIngredientFn,
+  modalVisible,
+  closeModal,
+  selectedIngredients,
+}) => {
   const ingredients = [
     {
       id: 'ing123',
@@ -13,25 +20,33 @@ const FindIngredient = ({ addIngredientFn, modalVisible, closeModal }) => {
       name: 'Chocolate Chips',
     },
   ];
+
   return (
     <View>
-      <Modal
+      <Overlay
         style={styles.ingredientModal}
         animationType="slide"
         visible={modalVisible}
         onRequestClose={() => {
           closeModal(!modalVisible);
         }}
+        fullScreen
       >
         <View style={styles.ingredientModal}>
-          <Text>Hello Modal!!!</Text>
-          <UserIngredientList
+          <IngredientList
             ingredients={ingredients}
-            onIngredientPress={addIngredientFn}
+            onPressFn={addIngredientFn}
+            selectedIngredients={selectedIngredients}
           />
-          <Button title="Close" onPress={() => closeModal(!modalVisible)} />
+          <View style={styles.closeButton}>
+            <Button
+              title="Close"
+              onPress={() => closeModal(!modalVisible)}
+              type="clear"
+            />
+          </View>
         </View>
-      </Modal>
+      </Overlay>
     </View>
   );
 };
@@ -44,9 +59,11 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   ingredientModal: {
-    margin: 20,
-    padding: 50,
-    backgroundColor: 'white',
+    marginTop: 35,
+    padding: 15,
+  },
+  closeButton: {
+    marginTop: 25,
   },
 });
 

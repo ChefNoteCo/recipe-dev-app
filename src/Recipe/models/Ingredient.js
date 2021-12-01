@@ -1,9 +1,13 @@
-const convert = require('convert-units');
+import { nanoid } from 'nanoid/non-secure';
+import convert from '../../app/helpers/convertUnits';
 
-const Ingredient = ({ id, name, unit = 'g', quantity = 0 }) => {
-  // console.log(convert().possibilities());
-  if (convert().possibilities().indexOf(unit) === -1) {
-    throw new Error('Provided unit of measurement not a valid option.');
+const Ingredient = ({ id = nanoid(), name, unit, quantity = 0 }) => {
+  if (unit) {
+    if (convert().possibilities().indexOf(unit) === -1) {
+      throw new Error(
+        `Provided unit (${unit}) of measurement not a valid option.`
+      );
+    }
   }
 
   return {
