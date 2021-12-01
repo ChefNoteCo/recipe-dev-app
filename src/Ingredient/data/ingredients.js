@@ -11,6 +11,15 @@ class IngredientsAPI {
     return await this.db.list(this.path);
   }
 
+  async save(data) {
+    const ingredient = Ingredient(data);
+    const savePath = `${this.path}/${ingredient.id}`;
+
+    await this.db.save(savePath, ingredient);
+
+    return ingredient;
+  }
+
   static parser() {
     return {
       getParse: (data, args) => {

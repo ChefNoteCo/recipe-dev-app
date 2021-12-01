@@ -19,7 +19,7 @@ class RecipesAPI {
     const recipe = Recipe(data);
     const savePath = `${this.path}/${recipe.id}`;
 
-    await this.db.save(savePath, data);
+    await this.db.save(savePath, recipe);
 
     return recipe;
   }

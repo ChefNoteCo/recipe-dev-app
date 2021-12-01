@@ -10,6 +10,7 @@ import { Ingredient, Instruction, Recipe } from '../../models';
 
 const RecipeForm = ({ navigation }) => {
   const dispatch = useDispatch();
+  const ingredients = useSelector(state => state.ingredients.all);
 
   let defaultState = Recipe({});
 
@@ -129,6 +130,7 @@ const RecipeForm = ({ navigation }) => {
           type="clear"
         />
         <FindIngredient
+          allIngredients={ingredients}
           modalVisible={ingredientModalVisible}
           closeModal={setIngredientModalVisible}
           addIngredientFn={addIngredientsToRecipe}

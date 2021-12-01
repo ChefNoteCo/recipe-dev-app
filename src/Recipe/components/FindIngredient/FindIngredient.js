@@ -5,22 +5,12 @@ import UserIngredientList from '../UserIngredientList/UserIngredientList';
 import IngredientList from '../../../app/components/IngredientList/IngredientList';
 
 const FindIngredient = ({
+  allIngredients,
   addIngredientFn,
   modalVisible,
   closeModal,
   selectedIngredients,
 }) => {
-  const ingredients = [
-    {
-      id: 'ing123',
-      name: 'Chocolate Whey Protein',
-    },
-    {
-      id: 'ing456',
-      name: 'Chocolate Chips',
-    },
-  ];
-
   return (
     <View>
       <Overlay
@@ -34,7 +24,7 @@ const FindIngredient = ({
       >
         <View style={styles.ingredientModal}>
           <IngredientList
-            ingredients={ingredients}
+            ingredients={allIngredients}
             onPressFn={addIngredientFn}
             selectedIngredients={selectedIngredients}
           />

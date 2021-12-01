@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import MeasurementUnitPicker from '../MeasurementUnitPicker/MeasurementUnitPicker';
+import MeasurementUnitPicker from '../../../app/components/MeasurementUnitPicker/MeasurementUnitPicker';
 
 const IngredientForm = ({ ingredients, onChange }) => {
   const currentList = ingredients.map(ingredient => {

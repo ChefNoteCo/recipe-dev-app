@@ -6,7 +6,7 @@ const initialState = { loading: true, all: [], recent: [] };
 
 export const saveRecipe = createAsyncThunk(
   'recipes/saveRecipes',
-  async (data, redirect) => {
+  async data => {
     const response = await recipesData.save(data);
     return response;
   }
