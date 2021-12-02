@@ -3,9 +3,9 @@ import convert from '../../app/helpers/convertUnits';
 
 const Ingredient = ({ id = nanoid(), name, baseUnit, baseQuantity }) => {
   if (baseUnit) {
-    if (convert().possibilities().indexOf(unit) === -1) {
+    if (convert().possibilities().indexOf(baseUnit) === -1) {
       throw new Error(
-        `Provided unit (${unit}) of measurement not a valid option.`
+        `Provided unit (${baseUnit}) of measurement not a valid option.`
       );
     }
   }

@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 export const RecipeInstructionList = ({ instructions }) => {
   const instructionText = instructions.map((instruction, index) => (
     <Text key={`${instruction.order}_${index}`} style={styles.item}>
-      {instruction.description}
+      {instruction.label}
     </Text>
   ));
   return (
