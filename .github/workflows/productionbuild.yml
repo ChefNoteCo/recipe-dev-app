@@ -3,12 +3,10 @@
 
 name: EAS Build
 
-on:
-  push:
-    branches: [ main ]
-
+on: workflow_dispatch
+    
 jobs:
-  test:
+  setup:
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,7 +23,7 @@ jobs:
         cache: 'npm'
     - run: npm install 
     - run: npm test
-  build:
+  deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -36,8 +34,8 @@ jobs:
           expo-token: ${{ secrets.EXPO_TOKEN }}
           expo-cache: true
       - name: Install dependencies
-        run: npm ci
+        run: npm install
       - name: Build on EAS
-        run: npx eas-cli build --platform ios --profile=development
+        run: npx eas-cli build --platform ios --profile=production
 
     

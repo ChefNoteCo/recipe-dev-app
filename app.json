@@ -1,11 +1,16 @@
 {
   "expo": {
-    "name": "recipe-dev-app",
-    "slug": "recipe-dev-app",
+    "name": "chefnote",
+    "slug": "chefnote",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  },
-  "name": "recipe-dev-app"
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.chefnoteco.chefnote"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.chefnoteco.chefnote",
+      "buildNumber": "0.1.0"
+    }
+  }
 }

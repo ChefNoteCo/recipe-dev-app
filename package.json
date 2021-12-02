@@ -1,11 +1,12 @@
 {
   "main": "index.js",
+  "name": "chefnote",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
-    "start": "react-native start",
-    "test": "echo 'Running noop test'"
+    "start": "expo start --dev-client",
+    "test": "echo 'Running noop tests'"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -18,7 +19,7 @@
     "expo": "^43.0.0",
     "expo-splash-screen": "~0.13.5",
     "expo-status-bar": "~1.1.0",
-    "expo-updates": "~0.10.15",
+    "expo-updates": "~0.10.13",
     "nanoid": "^3.1.30",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -30,7 +31,6 @@
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.8.0",
-    "react-native-unimodules": "~0.15.0",
     "react-native-vector-icons": "^9.0.0",
     "react-native-web": "0.17.1",
     "react-redux": "^7.2.5",
@@ -39,5 +39,6 @@
   "devDependencies": {
     "@babel/core": "^7.12.9"
   },
-  "private": true
+  "private": true,
+  "version": "1.0.0"
 }
