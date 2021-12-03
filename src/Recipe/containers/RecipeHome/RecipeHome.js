@@ -18,7 +18,11 @@ const RecipeHome = ({ navigation }) => {
 
   return (
     <View style={styles.recipeHome}>
-      <RecipeList recipes={recipes.all} navigateFn={navigation.navigate} />
+      <RecipeList
+        recipes={recipes.all}
+        navigateFn={navigation.navigate}
+        testId="recipeListPage"
+      />
     </View>
   );
 };
