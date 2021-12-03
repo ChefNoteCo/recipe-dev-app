@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "chefnote",
-    "slug": "chefnote",
+    "name": "chefnotes",
+    "slug": "chefnotes",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"],
     "android": {
-      "package": "com.chefnoteco.chefnote"
+      "package": "com.chefnotesco.chefnotes"
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.chefnoteco.chefnote",
+      "bundleIdentifier": "com.chefnotesco.chefnotes",
       "buildNumber": "0.1.0"
     }
   }
