@@ -27,9 +27,10 @@
     }
   },
   "configurations": {
-    "ios": {
-      "device": "simulator",
-      "app": "ios"
+    "ios.sim": {
+      "binaryPath": "e2e/bin/Exponent.app",
+      "type": "ios.simulator",
+      "name": "iPhone 12"
     },
     "android": {
       "device": "emulator",

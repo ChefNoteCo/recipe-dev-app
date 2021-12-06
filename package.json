@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "start": "expo start --dev-client",
     "test": "echo 'Running noop tests'",
-    "e2e": "detox test --configuration ios"
+    "e2e": "detox test --configuration ios.sim"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
@@ -39,7 +39,14 @@
     "redux": "^4.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@testing-library/react-native": "^9.0.0",
+    "detox": "^12.3.0",
+    "detox-expo-helpers": "^0.6.0",
+    "expo-detox-hook": "^1.0.10",
+    "jest": "^27.4.3",
+    "react-native-testing-library": "^6.0.0",
+    "react-test-renderer": "^17.0.2"
   },
   "private": true,
   "version": "1.0.0"
