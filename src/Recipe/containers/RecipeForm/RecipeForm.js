@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Text } from 'react-native-elements';
@@ -7,10 +7,23 @@ import IngredientForm from '../../components/IngredientForm/IngredientForm';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import { saveRecipe } from '../../state/recipes';
 import { Ingredient, Instruction, Recipe } from '../../models';
+import {
+  addOrRemoveIngredientsToRecipe,
+  addOrRemoveInstructionsToRecipe,
+  alreadySelected,
+} from './formManagement';
+import { fetchAllIngredients } from '../../../Ingredient/state/ingredients';
 
 const RecipeForm = ({ navigation }) => {
   const dispatch = useDispatch();
   const ingredients = useSelector(state => state.ingredients.all);
+  const ingredientLoading = useSelector(state => state.ingredients.loading);
+
+  useEffect(() => {
+    if (ingredientLoading) {
+      dispatch(fetchAllIngredients());
+    }
+  });
 
   let defaultState = Recipe({});
 
@@ -19,30 +32,22 @@ const RecipeForm = ({ navigation }) => {
   const [instructionFieldFocused, setInstructionFieldFocused] = useState(false);
 
   const addIngredientsToRecipe = selectedIngredient => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-
-    const alreadySelectedIndex = updatedRecipe.ingredients.findIndex(
-      i => (i.id = selectedIngredient.id)
+    const updatedRecipe = addOrRemoveIngredientsToRecipe(
+      draftRecipe,
+      selectedIngredient
     );
-    if (alreadySelectedIndex > -1) {
-      updatedRecipe.ingredients.splice(alreadySelectedIndex, 1);
-    } else {
-      const ingredient = Ingredient(selectedIngredient);
-      updatedRecipe.ingredients.push(ingredient);
-    }
     setRecipeState(updatedRecipe);
   };
 
-  const updateIngredientInfo = (ingredientId, field, value) => {
+  const updateIngredientInfo = (ingredient, field, value) => {
     if (!value) {
       return;
     }
     const updatedRecipe = Object.assign({}, draftRecipe);
-    const ingredientIndex = updatedRecipe.ingredients.findIndex(
-      i => i.id === ingredientId
-    );
-    if (ingredientIndex > -1) {
-      updatedRecipe.ingredients[ingredientIndex][field] = value;
+    const selected = alreadySelected(updatedRecipe.ingredients, ingredient.id);
+
+    if (selected.alreadySelected) {
+      updatedRecipe.ingredients[selected.index][field] = value;
     }
     setRecipeState(updatedRecipe);
   };
@@ -54,21 +59,18 @@ const RecipeForm = ({ navigation }) => {
   };
 
   const addInstructionToRecipe = instructionText => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
     const instruction = Instruction({ label: instructionText });
-    updatedRecipe.instructions.push(instruction);
+    const updatedRecipe = addOrRemoveInstructionsToRecipe(
+      draftRecipe,
+      instruction
+    );
     setRecipeState(updatedRecipe);
   };
 
   const removeInstructionFromRecipe = instructionId => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    const instructionIndex = updatedRecipe.instructions.findIndex(
-      i => i.id === instructionId
-    );
-    if (instructionIndex === -1) {
-      return;
-    }
-    updatedRecipe.instructions.splice(instructionIndex, 1);
+    const updatedRecipe = addOrRemoveInstructionsToRecipe(draftRecipe, {
+      id: instructionId,
+    });
     setRecipeState(updatedRecipe);
   };
 
@@ -128,6 +130,7 @@ const RecipeForm = ({ navigation }) => {
           title="Add Ingredient"
           onPress={() => setIngredientModalVisible(true)}
           type="clear"
+          disabled={ingredientLoading}
         />
         <FindIngredient
           allIngredients={ingredients}

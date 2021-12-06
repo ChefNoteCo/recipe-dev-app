@@ -11,13 +11,13 @@ const IngredientForm = ({ ingredients, onChange }) => {
           placeholder="qty"
           style={styles.quantityInput}
           onChangeText={val => {
-            onChange(ingredient.id, 'quantity', val);
+            onChange(ingredient, 'quantity', val);
           }}
         />
         <View style={styles.unitInput}>
           <MeasurementUnitPicker
             onSelectValue={val => {
-              onChange(ingredient.id, 'unit', val);
+              onChange(ingredient, 'unit', val);
             }}
           />
         </View>

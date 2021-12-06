@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chefnotes",
-    "slug": "chefnotes",
+    "name": "ChefNotes",
+    "slug": "ChefNotes",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"],
     "android": {

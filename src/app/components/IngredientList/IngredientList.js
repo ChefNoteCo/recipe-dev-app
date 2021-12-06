@@ -8,10 +8,12 @@ const IngredientList = ({ ingredients, onPressFn, selectedIngredients }) => {
     <View>
       {ingredients.map((item, index) => {
         const isSelected =
-          selectedIngredients.filter(n => n.id === item.id).length === 0;
-        const selectedIcon = isSelected ? null : (
+          selectedIngredients.findIndex(n => {
+            return n.id === item.id;
+          }) >= 0;
+        const selectedIcon = isSelected ? (
           <Icon name="checkmark" size={20} style={styles.selectedIcon} />
-        );
+        ) : null;
         return (
           <ListItem key={index} bottomDivider onPress={() => onPressFn(item)}>
             <ListItem.Content style={styles.listContent}>
