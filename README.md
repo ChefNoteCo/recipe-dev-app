@@ -25,6 +25,19 @@ Additional builds are created manually to save on minutes in the Expo Build tool
 * [Trigger builds from CI - Expo docs](https://docs.expo.dev/build/building-on-ci/)
 * [ChefNote Scratchpad - Miro](https://miro.com/app/board/o9J_l1HDNQY=/)
 
+## Releases
+Builds go to the app store.  These are build using Expo Application Service (EAS).  Builds can either be created for the simulator, Test Flight or the App Store.  Each build has an associated release channel.
+
+Bundles get published to a specific release channel.  This is similar to a group of users.  As a result, the feature set will vary based on the user groups.
+
+| "Platform"  | Build Type  | Release Channel | Target      | Description                                              |
+| ----------- | ----------- | --------------- | ----------- | -------------------------------------------------------- |
+| Development | Development | Development     | Local       | Development builds used for internal testing             |
+| Simulator   | Development | Development     | Local       | Development builds that can be used for local testing    |
+| Staging     | Production  | Beta            | Test Flight | Production-like build distributed to external test users |
+| Production  | Production  | Production      | App Store   | Production build available for all users                 |
+
+
 ## Submitting to the App Store
 
 
