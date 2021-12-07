@@ -5,7 +5,6 @@
   "build": {
     "development": {
       "distribution": "internal",
-      "releaseChannel": "development",
       "env": {
         "APP_ENV": "development"
       },
@@ -16,21 +15,16 @@
         "buildConfiguration": "Debug"
       }
     },
+    "preview": {
+      "distribution": "internal"
+    },
     "simulator": {
       "distribution": "internal",
-      "releaseChannel": "dev",
       "ios": {
         "simulator": true
       }
     },
-    "staging": {
-      "releaseChannel": "beta",
-      "env": {
-        "APP_ENV": "staging"
-      }
-    },
     "production": {
-      "releaseChannel": "prod",
       "env": {
         "APP_ENV": "production"
       }
