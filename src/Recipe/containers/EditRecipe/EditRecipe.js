@@ -5,6 +5,7 @@ import { Button, Input, Text } from 'react-native-elements';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import IngredientForm from '../../components/IngredientForm/IngredientForm';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
+import LoadingScreen from '../../../app/components/LoadingScreen/LoadingScreen';
 import { saveRecipe } from '../../state/recipes';
 import { Ingredient, Instruction, Recipe } from '../../models';
 import {
@@ -105,76 +106,78 @@ const EditRecipe = ({ navigation, route }) => {
     ? styles.instructionFormOnFocus
     : styles.instructionForm;
   return (
-    <ScrollView style={styles.inputForm}>
-      <View style={styles.metadataForm}>
-        <Input
-          value={draftRecipe.name}
-          onChangeText={val => updateRecipeMetadata('name', val)}
-          placeholder="Recipe Name"
-        />
-        <Input
-          value={draftRecipe.servings}
-          onChangeText={val => updateRecipeMetadata('servings', val)}
-          placeholder="Servings"
-          keyboardType="number-pad"
-        />
-        <Input
-          value={draftRecipe.prepTime}
-          onChangeText={val => updateRecipeMetadata('prepTime', val)}
-          placeholder="Prep Time (minutes)"
-          keyboardType="number-pad"
-        />
-        <Input
-          value={draftRecipe.cookTime}
-          onChangeText={val => updateRecipeMetadata('cookTime', val)}
-          placeholder="Cook Time (minutes)"
-          keyboardType="number-pad"
-        />
-      </View>
-      <View style={styles.ingredientForm}>
-        <Text h4>Ingredients</Text>
-        <IngredientForm
-          ingredients={draftRecipe.ingredients}
-          onChange={updateIngredientInfo}
-        />
-        <Button
-          title="Add Ingredient"
-          onPress={() => setIngredientModalVisible(true)}
-          type="clear"
-          disabled={ingredientLoading}
-        />
-        <FindIngredient
-          allIngredients={ingredients}
-          modalVisible={ingredientModalVisible}
-          closeModal={setIngredientModalVisible}
-          addIngredientFn={addIngredientsToRecipe}
-          selectedIngredients={draftRecipe.ingredients}
-        />
-      </View>
-      <View style={instructionStyle}>
-        <Text h4>Instructions</Text>
-        <InstructionForm
-          instructions={draftRecipe.instructions}
-          onDragEnd={updateInstructionOrder}
-          onDelete={removeInstructionFromRecipe}
-          onAdd={addInstructionToRecipe}
-          onFocus={() => handleInstructionFocus(true)}
-          onBlur={() => handleInstructionFocus(false)}
-        />
-      </View>
-      <View style={styles.formButtons}>
-        <Button
-          title="Cancel"
-          onPress={() => navigation.navigate('RecipeList')}
-          style={styles.submitButton}
-        />
-        <Button
-          title="Save"
-          onPress={saveNewRecipe}
-          style={styles.submitButton}
-        />
-      </View>
-    </ScrollView>
+    <LoadingScreen loading={recipeLoading}>
+      <ScrollView style={styles.inputForm}>
+        <View style={styles.metadataForm}>
+          <Input
+            value={draftRecipe.name}
+            onChangeText={val => updateRecipeMetadata('name', val)}
+            placeholder="Recipe Name"
+          />
+          <Input
+            value={draftRecipe.servings}
+            onChangeText={val => updateRecipeMetadata('servings', val)}
+            placeholder="Servings"
+            keyboardType="number-pad"
+          />
+          <Input
+            value={draftRecipe.prepTime}
+            onChangeText={val => updateRecipeMetadata('prepTime', val)}
+            placeholder="Prep Time (minutes)"
+            keyboardType="number-pad"
+          />
+          <Input
+            value={draftRecipe.cookTime}
+            onChangeText={val => updateRecipeMetadata('cookTime', val)}
+            placeholder="Cook Time (minutes)"
+            keyboardType="number-pad"
+          />
+        </View>
+        <View style={styles.ingredientForm}>
+          <Text h4>Ingredients</Text>
+          <IngredientForm
+            ingredients={draftRecipe.ingredients}
+            onChange={updateIngredientInfo}
+          />
+          <Button
+            title="Add Ingredient"
+            onPress={() => setIngredientModalVisible(true)}
+            type="clear"
+            disabled={ingredientLoading}
+          />
+          <FindIngredient
+            allIngredients={ingredients}
+            modalVisible={ingredientModalVisible}
+            closeModal={setIngredientModalVisible}
+            addIngredientFn={addIngredientsToRecipe}
+            selectedIngredients={draftRecipe.ingredients}
+          />
+        </View>
+        <View style={instructionStyle}>
+          <Text h4>Instructions</Text>
+          <InstructionForm
+            instructions={draftRecipe.instructions}
+            onDragEnd={updateInstructionOrder}
+            onDelete={removeInstructionFromRecipe}
+            onAdd={addInstructionToRecipe}
+            onFocus={() => handleInstructionFocus(true)}
+            onBlur={() => handleInstructionFocus(false)}
+          />
+        </View>
+        <View style={styles.formButtons}>
+          <Button
+            title="Cancel"
+            onPress={() => navigation.navigate('RecipeList')}
+            style={styles.submitButton}
+          />
+          <Button
+            title="Save"
+            onPress={saveNewRecipe}
+            style={styles.submitButton}
+          />
+        </View>
+      </ScrollView>
+    </LoadingScreen>
   );
 };
 
