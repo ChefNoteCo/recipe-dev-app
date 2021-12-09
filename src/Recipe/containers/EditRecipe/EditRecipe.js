@@ -6,6 +6,7 @@ import FindIngredient from '../../components/FindIngredient/FindIngredient';
 import IngredientForm from '../../components/IngredientForm/IngredientForm';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import LoadingScreen from '../../../app/components/LoadingScreen/LoadingScreen';
+import MetadataForm from '../../components/RecipeForm/MetadataForm';
 import { saveRecipe } from '../../state/recipes';
 import { Ingredient, Instruction, Recipe } from '../../models';
 import {
@@ -107,9 +108,14 @@ const EditRecipe = ({ navigation, route }) => {
     : styles.instructionForm;
   return (
     <LoadingScreen loading={recipeLoading}>
+      {/* <RecipeForm recipe={draftRecipe} onMetadataChange={updateRecipeMetadata} /> */}
       <ScrollView style={styles.inputForm}>
         <View style={styles.metadataForm}>
-          <Input
+          <MetadataForm
+            recipe={draftRecipe}
+            onFieldChange={updateRecipeMetadata}
+          />
+          {/* <Input
             value={draftRecipe.name}
             onChangeText={val => updateRecipeMetadata('name', val)}
             placeholder="Recipe Name"
@@ -131,7 +137,7 @@ const EditRecipe = ({ navigation, route }) => {
             onChangeText={val => updateRecipeMetadata('cookTime', val)}
             placeholder="Cook Time (minutes)"
             keyboardType="number-pad"
-          />
+          /> */}
         </View>
         <View style={styles.ingredientForm}>
           <Text h4>Ingredients</Text>
