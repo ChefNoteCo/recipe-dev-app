@@ -142,22 +142,27 @@ const EditRecipe = ({ navigation, route }) => {
         <View style={styles.ingredientForm}>
           <Text h4>Ingredients</Text>
           <RecipeIngredientForm
-            ingredients={draftRecipe.ingredients}
+            allIngredients={ingredients}
+            showModal={ingredientModalVisible}
+            toggleModal={setIngredientModalVisible}
+            selectedIngredients={draftRecipe.ingredients}
+            ingredientsLoading={ingredientLoading}
+            onAddIngredient={addIngredientsToRecipe}
             onChange={updateIngredientInfo}
           />
-          <Button
+          {/* <Button
             title="Add Ingredient"
             onPress={() => setIngredientModalVisible(true)}
             type="clear"
             disabled={ingredientLoading}
-          />
-          <FindIngredient
+          /> */}
+          {/* <FindIngredient
             allIngredients={ingredients}
             modalVisible={ingredientModalVisible}
             closeModal={setIngredientModalVisible}
             addIngredientFn={addIngredientsToRecipe}
             selectedIngredients={draftRecipe.ingredients}
-          />
+          /> */}
         </View>
         <View style={instructionStyle}>
           <Text h4>Instructions</Text>

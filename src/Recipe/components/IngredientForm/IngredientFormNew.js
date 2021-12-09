@@ -1,9 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Button, Text } from 'react-native-elements';
 import MeasurementUnitPicker from '../../../app/components/MeasurementUnitPicker/MeasurementUnitPicker';
+import FindIngredient from '../FindIngredient/FindIngredient';
 
-const IngredientField = ({ ingredient, onChange }) => {
+const IngredientField = ({
+  ingredient,
+  ingredientsLoading,
+  onChange,
+  setIngredientModalVisible,
+}) => {
   return (
     <View key={ingredient.id} style={styles.listItem}>
       <TextInput
@@ -24,12 +30,37 @@ const IngredientField = ({ ingredient, onChange }) => {
   );
 };
 
-const RecipeIngredientForm = ({ ingredients, onAddIngredient, onChange }) => {
-  const currentList = ingredients.map(ingredient => (
+const RecipeIngredientForm = ({
+  allIngredients,
+  selectedIngredients,
+  ingredientsLoading,
+  onAddIngredient,
+  onChange,
+  showModal,
+  toggleModal,
+}) => {
+  const currentList = selectedIngredients.map(ingredient => (
     <IngredientField ingredient={ingredient} onChange={onChange} />
   ));
 
-  return <>{currentList}</>;
+  return (
+    <View>
+      {currentList}
+      <Button
+        title="Add Ingredient"
+        onPress={() => toggleModal(true)}
+        type="clear"
+        disabled={ingredientsLoading}
+      />
+      <FindIngredient
+        allIngredients={allIngredients}
+        modalVisible={showModal}
+        closeModal={() => toggleModal(false)}
+        addIngredientFn={onAddIngredient}
+        selectedIngredients={selectedIngredients}
+      />
+    </View>
+  );
 };
 
 export default RecipeIngredientForm;
