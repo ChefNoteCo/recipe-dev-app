@@ -1,8 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import recipesData from '../data/recipe';
 import { sortAscending, sortDescending } from '../../app/helpers/sortOrder';
+import { BaseRecipe } from '../../app/models';
 
-const initialState = { loading: true, all: [], recent: [] };
+const MAX_RECENT_LENGTH = 3;
+const initialState = {
+  loading: true,
+  all: [],
+  recent: [],
+  detail: {
+    loading: true,
+    data: BaseRecipe({}),
+  },
+};
 
 export const saveRecipe = createAsyncThunk(
   'recipes/saveRecipes',
@@ -18,6 +28,14 @@ export const fetchAllRecipes = createAsyncThunk(
     const recipes = await recipesData.list();
     const sortedRecipes = recipes.sort(sortAscending('name'));
     return sortedRecipes;
+  }
+);
+
+export const fetchRecipe = createAsyncThunk(
+  'recipes/fetchRecipe',
+  async recipeId => {
+    const recipe = await recipesData.get(recipeId);
+    return recipe;
   }
 );
 
@@ -55,13 +73,23 @@ export const recipeSlice = createSlice({
     builder.addCase(fetchAllRecipes.rejected, (state, action) => {
       console.log('Error!!!', action);
     });
+    builder.addCase(fetchRecipe.pending, (state, action) => {
+      state.detail.loading = true;
+    });
+    builder.addCase(fetchRecipe.fulfilled, (state, action) => {
+      state.detail.data = action.payload;
+      if (state.recent.length === MAX_RECENT_LENGTH) {
+        state.recent.shift();
+      }
+      state.recent.push(action.payload);
+      state.detail.loading = false;
+    });
     builder.addCase(saveRecipe.pending, (state, action) => {
       state.loading = true;
     });
 
     builder.addCase(saveRecipe.fulfilled, (state, action) => {
       state.all.push(action.payload);
-      const MAX_RECENT_LENGTH = 3;
       if (state.recent.length === MAX_RECENT_LENGTH) {
         state.recent.shift();
       }

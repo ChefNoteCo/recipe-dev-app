@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { StyleSheet, Text, View } from 'react-native';
 import RecipeMetadata from '../../components/RecipeMetadata/RecipeMetadata';
 import { RecipeIngredientList } from '../../components/RecipeIngredientList/RecipeIngredientList';
 import { RecipeInstructionList } from '../../components/RecipeInstructionList/RecipeInstructionList';
+import EditRecipeButton from '../../components/EditRecipeButton/EditRecipeButton';
 
 const RecipeDetail = ({ navigation, route }) => {
-  const recipes = useSelector(state => state.recipes);
+  const recipeId = route.params.id;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <EditRecipeButton
+          onPress={() => navigation.navigate('EditRecipe', { id: recipeId })}
+        />
+      ),
+    });
+  }, [navigation]);
 
   // TODO: Use Thunk to get the specific recipe detail from storage
   // Currently state.recipes is an array, not an object so need to get it from storage
   // where it is in the appropriate shape
-  const recipeId = route.params.id;
+  const recipes = useSelector(state => state.recipes);
   const recipeDetails = recipes.all.filter(recipe => {
     return recipe.id === recipeId;
   });

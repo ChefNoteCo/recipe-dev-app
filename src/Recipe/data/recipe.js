@@ -8,7 +8,7 @@ class RecipesAPI {
   }
 
   async get(id) {
-    return await this.db.get(this.path);
+    return await this.db.get(this.path, id).then(Recipe);
   }
 
   async list() {
@@ -30,16 +30,6 @@ class RecipesAPI {
    */
   static parser() {
     return {
-      getParse: (data, args) => {
-        /* Data shape is { id: Recipe } */
-        const jsonData = JSON.parse(data);
-        const requestedId = args[0];
-
-        const filteredRecipes = jsonData.filter(
-          value => value.id == requestedId
-        );
-        return Recipe(filteredRecipes[0]);
-      },
       listParse: (data, args) => {
         /* Input shape is { id: Recipe } */
         /* Output shape should be [Recipe] */
