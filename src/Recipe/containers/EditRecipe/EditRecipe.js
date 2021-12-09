@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Input, Text } from 'react-native-elements';
-import FindIngredient from '../../components/FindIngredient/FindIngredient';
-import RecipeIngredientForm from '../../components/IngredientForm/IngredientFormNew';
-import InstructionForm from '../../components/InstructionForm/InstructionForm';
+// import { Button, Input, Text } from 'react-native-elements';
+// import FindIngredient from '../../components/FindIngredient/FindIngredient';
+// import RecipeIngredientForm from '../../components/IngredientForm/IngredientFormNew';
+// import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import LoadingScreen from '../../../app/components/LoadingScreen/LoadingScreen';
-import MetadataForm from '../../components/RecipeForm/MetadataForm';
+// import MetadataForm from '../../components/RecipeForm/MetadataForm';
 import { saveRecipe } from '../../state/recipes';
 import { Ingredient, Instruction, Recipe } from '../../models';
-import {
-  addOrRemoveIngredientsToRecipe,
-  addOrRemoveInstructionsToRecipe,
-  alreadySelected,
-} from '../RecipeForm/formManagement';
+// import {
+//   addOrRemoveIngredientsToRecipe,
+//   addOrRemoveInstructionsToRecipe,
+//   alreadySelected,
+// } from '../RecipeForm/formManagement';
+import RecipeForm from '../../components/RecipeForm/RecipeForm';
 import { fetchRecipe } from '../../state/recipes';
 import { fetchAllIngredients } from '../../../Ingredient/state/ingredients';
 
@@ -38,84 +39,87 @@ const EditRecipe = ({ navigation, route }) => {
     }
   });
 
-  let defaultState = Recipe({});
+  // const [draftRecipe, setRecipeState] = useState(defaultState);
+  // const [ingredientModalVisible, setIngredientModalVisible] = useState(false);
+  // const [instructionFieldFocused, setInstructionFieldFocused] = useState(false);
 
-  const [draftRecipe, setRecipeState] = useState(defaultState);
-  const [ingredientModalVisible, setIngredientModalVisible] = useState(false);
-  const [instructionFieldFocused, setInstructionFieldFocused] = useState(false);
+  // const addIngredientsToRecipe = selectedIngredient => {
+  //   const updatedRecipe = addOrRemoveIngredientsToRecipe(
+  //     draftRecipe,
+  //     selectedIngredient
+  //   );
+  //   setRecipeState(updatedRecipe);
+  // };
 
-  const addIngredientsToRecipe = selectedIngredient => {
-    const updatedRecipe = addOrRemoveIngredientsToRecipe(
-      draftRecipe,
-      selectedIngredient
-    );
-    setRecipeState(updatedRecipe);
-  };
+  // const updateIngredientInfo = (ingredient, field, value) => {
+  //   if (!value) {
+  //     return;
+  //   }
+  //   const updatedRecipe = Object.assign({}, draftRecipe);
+  //   const selected = alreadySelected(updatedRecipe.ingredients, ingredient.id);
 
-  const updateIngredientInfo = (ingredient, field, value) => {
-    if (!value) {
-      return;
-    }
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    const selected = alreadySelected(updatedRecipe.ingredients, ingredient.id);
+  //   if (selected.alreadySelected) {
+  //     updatedRecipe.ingredients[selected.index][field] = value;
+  //   }
+  //   setRecipeState(updatedRecipe);
+  // };
 
-    if (selected.alreadySelected) {
-      updatedRecipe.ingredients[selected.index][field] = value;
-    }
-    setRecipeState(updatedRecipe);
-  };
+  // const updateInstructionOrder = instructions => {
+  //   const updatedRecipe = Object.assign({}, draftRecipe);
+  //   updatedRecipe.instructions = instructions.data;
+  //   setRecipeState(updatedRecipe);
+  // };
 
-  const updateInstructionOrder = instructions => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe.instructions = instructions.data;
-    setRecipeState(updatedRecipe);
-  };
+  // const addInstructionToRecipe = instructionText => {
+  //   const instruction = Instruction({ label: instructionText });
+  //   const updatedRecipe = addOrRemoveInstructionsToRecipe(
+  //     draftRecipe,
+  //     instruction
+  //   );
+  //   setRecipeState(updatedRecipe);
+  // };
 
-  const addInstructionToRecipe = instructionText => {
-    const instruction = Instruction({ label: instructionText });
-    const updatedRecipe = addOrRemoveInstructionsToRecipe(
-      draftRecipe,
-      instruction
-    );
-    setRecipeState(updatedRecipe);
-  };
+  // const removeInstructionFromRecipe = instructionId => {
+  //   const updatedRecipe = addOrRemoveInstructionsToRecipe(draftRecipe, {
+  //     id: instructionId,
+  //   });
+  //   setRecipeState(updatedRecipe);
+  // };
 
-  const removeInstructionFromRecipe = instructionId => {
-    const updatedRecipe = addOrRemoveInstructionsToRecipe(draftRecipe, {
-      id: instructionId,
-    });
-    setRecipeState(updatedRecipe);
-  };
+  // const updateRecipeMetadata = (field, value) => {
+  //   const updatedRecipe = Object.assign({}, draftRecipe);
+  //   updatedRecipe[field] = value;
+  //   setRecipeState(updatedRecipe);
+  // };
 
-  const updateRecipeMetadata = (field, value) => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe[field] = value;
-    setRecipeState(updatedRecipe);
-  };
+  // const handleInstructionFocus = isFocused => {
+  //   setInstructionFieldFocused(isFocused);
+  // };
 
-  const handleInstructionFocus = isFocused => {
-    setInstructionFieldFocused(isFocused);
-  };
-
-  const saveNewRecipe = () => {
-    dispatch(saveRecipe(draftRecipe)).then(() => {
-      navigation.navigate('RecipeDetail', { id: draftRecipe.id });
+  const saveNewRecipe = editedRecipe => {
+    dispatch(saveRecipe(editedRecipe)).then(() => {
+      navigation.navigate('RecipeDetail', { id: editedRecipe.id });
     });
   };
 
-  const instructionStyle = instructionFieldFocused
-    ? styles.instructionFormOnFocus
-    : styles.instructionForm;
+  // const instructionStyle = instructionFieldFocused
+  //   ? styles.instructionFormOnFocus
+  //   : styles.instructionForm;
   return (
     <LoadingScreen loading={recipeLoading}>
-      {/* <RecipeForm recipe={draftRecipe} onMetadataChange={updateRecipeMetadata} /> */}
-      <ScrollView style={styles.inputForm}>
+      <RecipeForm
+        allIngredients={ingredients}
+        recipe={recipe}
+        onSave={saveNewRecipe}
+        onCancel={() => navigation.navigate('RecipeList')}
+      />
+      {/* <ScrollView style={styles.inputForm}>
         <View style={styles.metadataForm}>
           <MetadataForm
             recipe={draftRecipe}
             onFieldChange={updateRecipeMetadata}
-          />
-          {/* <Input
+          /> */}
+      {/* <Input
             value={draftRecipe.name}
             onChangeText={val => updateRecipeMetadata('name', val)}
             placeholder="Recipe Name"
@@ -138,7 +142,7 @@ const EditRecipe = ({ navigation, route }) => {
             placeholder="Cook Time (minutes)"
             keyboardType="number-pad"
           /> */}
-        </View>
+      {/* </View>
         <View style={styles.ingredientForm}>
           <Text h4>Ingredients</Text>
           <RecipeIngredientForm
@@ -156,14 +160,14 @@ const EditRecipe = ({ navigation, route }) => {
             type="clear"
             disabled={ingredientLoading}
           /> */}
-          {/* <FindIngredient
+      {/* <FindIngredient
             allIngredients={ingredients}
             modalVisible={ingredientModalVisible}
             closeModal={setIngredientModalVisible}
             addIngredientFn={addIngredientsToRecipe}
             selectedIngredients={draftRecipe.ingredients}
           /> */}
-        </View>
+      {/* </View>
         <View style={instructionStyle}>
           <Text h4>Instructions</Text>
           <InstructionForm
@@ -187,7 +191,7 @@ const EditRecipe = ({ navigation, route }) => {
             style={styles.submitButton}
           />
         </View>
-      </ScrollView>
+      </ScrollView> */}
     </LoadingScreen>
   );
 };

@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid/non-secure';
-import convert from '../../app/helpers/convertUnits';
 
-const Ingredient = ({ id = nanoid(), label, order }) => {
+const Instruction = ({ id = nanoid(), label, order }) => {
   return {
     id,
     label,
@@ -9,4 +8,4 @@ const Ingredient = ({ id = nanoid(), label, order }) => {
   };
 };
 
-export default Ingredient;
+export default Instruction;
