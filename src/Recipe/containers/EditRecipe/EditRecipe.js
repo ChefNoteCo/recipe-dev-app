@@ -3,7 +3,7 @@ import { ScrollView, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Text } from 'react-native-elements';
 import FindIngredient from '../../components/FindIngredient/FindIngredient';
-import IngredientForm from '../../components/IngredientForm/IngredientForm';
+import RecipeIngredientForm from '../../components/IngredientForm/IngredientFormNew';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import LoadingScreen from '../../../app/components/LoadingScreen/LoadingScreen';
 import MetadataForm from '../../components/RecipeForm/MetadataForm';
@@ -141,7 +141,7 @@ const EditRecipe = ({ navigation, route }) => {
         </View>
         <View style={styles.ingredientForm}>
           <Text h4>Ingredients</Text>
-          <IngredientForm
+          <RecipeIngredientForm
             ingredients={draftRecipe.ingredients}
             onChange={updateIngredientInfo}
           />

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import convert from '../../../app/helpers/convertUnits';
 
-const MeasurementUnitPicker = ({ value, onSelectValue }) => {
+const MeasurementUnitPicker = ({ style, value, onSelectValue }) => {
   let allUnits = convert().possibilities();
 
   if (value) {
@@ -15,7 +15,7 @@ const MeasurementUnitPicker = ({ value, onSelectValue }) => {
   });
 
   return (
-    <View>
+    <View style={style}>
       <RNPickerSelect
         items={formattedUnits}
         onValueChange={onSelectValue}

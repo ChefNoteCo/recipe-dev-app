@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import MeasurementUnitPicker from '../../../app/components/MeasurementUnitPicker/MeasurementUnitPicker';
 
-const IngredientForm = ({ ingredients, onChange }) => {
+const RecipeIngredientForm = ({ ingredients, onChange }) => {
   const currentList = ingredients.map(ingredient => {
     return (
       <View key={ingredient.id} style={styles.listItem}>
@@ -29,7 +29,7 @@ const IngredientForm = ({ ingredients, onChange }) => {
   return <>{currentList}</>;
 };
 
-export default IngredientForm;
+export default RecipeIngredientForm;
 
 const styles = StyleSheet.create({
   listItem: {
