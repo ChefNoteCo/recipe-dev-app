@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
+import { Formik, FieldArray } from 'formik';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import RecipeIngredientForm from '../IngredientForm/IngredientFormNew';
 import MetadataForm from './MetadataForm';
@@ -9,6 +16,7 @@ import {
   addOrRemoveInstructionsToRecipe,
   alreadySelected,
 } from './formManagement';
+import { Instruction } from '../../models';
 
 const RecipeForm = ({
   recipe,
@@ -77,42 +85,99 @@ const RecipeForm = ({
     ? styles.instructionFormOnFocus
     : styles.instructionForm;
   return (
-    <ScrollView style={styles.inputForm}>
-      <View style={styles.metadataForm}>
-        <MetadataForm recipe={recipe} onFieldChange={updateRecipeMetadata} />
-      </View>
-      <View style={styles.ingredientForm}>
-        <Text h4>Ingredients</Text>
-        <RecipeIngredientForm
-          allIngredients={allIngredients}
-          showModal={showIngredientModal}
-          toggleModal={setIngredientModal}
-          selectedIngredients={draftRecipe.ingredients}
-          ingredientsLoading={loadingIngredients}
-          onAddIngredient={addIngredientsToRecipe}
-          onChange={updateIngredientInfo}
-        />
-      </View>
-      <View style={instructionStyle}>
-        <Text h4>Instructions</Text>
-        <InstructionForm
-          instructions={draftRecipe.instructions}
-          onDragEnd={updateInstructionOrder}
-          onDelete={removeInstructionFromRecipe}
-          onAdd={addInstructionToRecipe}
-          onFocus={() => handleInstructionFocus(true)}
-          onBlur={() => handleInstructionFocus(false)}
-        />
-      </View>
-      <View style={styles.formButtons}>
-        <Button title="Cancel" onPress={onCancel} style={styles.submitButton} />
-        <Button
-          title="Save"
-          onPress={() => onSave(draftRecipe)}
-          style={styles.submitButton}
-        />
-      </View>
-    </ScrollView>
+    <Formik initialValues={recipe} onSubmit={values => onSave(values)}>
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+      }) => (
+        <ScrollView style={styles.inputForm}>
+          <TouchableOpacity
+            onPress={() => {
+              Keyboard.dismiss();
+            }}
+          >
+            <View style={styles.metadataForm}>
+              <Input
+                value={values.name}
+                onChangeText={handleChange('name')}
+                onBlur={handleBlur('name')}
+                placeholder="Recipe Name"
+              />
+              <Input
+                value={values.servings}
+                onChangeText={handleChange('servings')}
+                onBlur={handleBlur('servings')}
+                placeholder="Servings"
+                keyboardType="number-pad"
+              />
+              <Input
+                value={values.prepTime}
+                onChangeText={handleChange('prepTime')}
+                onBlur={handleBlur('prepTime')}
+                placeholder="Prep Time (minutes)"
+                keyboardType="number-pad"
+              />
+              <Input
+                value={values.cookTime}
+                onChangeText={handleChange('cookTime')}
+                onBlur={handleBlur('cookTime')}
+                placeholder="Cook Time (minutes)"
+                keyboardType="number-pad"
+              />
+            </View>
+            <View style={styles.ingredientForm}>
+              <Text h4>Ingredients</Text>
+              {/* <FieldArray name="ingredients">
+              {({ insert, remove, push }) => (
+                <RecipeIngredientForm
+                  allIngredients={allIngredients}
+                  showModal={showIngredientModal}
+                  toggleModal={setIngredientModal}
+                  selectedIngredients={values.ingredients}
+                  ingredientsLoading={loadingIngredients}
+                  onAddIngredient={push}
+                />
+              )}
+            </FieldArray> */}
+            </View>
+            <View style={instructionStyle}>
+              <Text h4>Instructions</Text>
+              <FieldArray
+                name="instructions"
+                render={({ insert, remove, push }) => (
+                  <InstructionForm
+                    instructions={values.instructions}
+                    onChange={handleChange}
+                    onAddItem={() => {
+                      const defaultInstruction = Instruction({});
+                      return push(defaultInstruction);
+                    }}
+                    onDeleteItem={remove}
+                    onBlur={handleBlur}
+                  />
+                )}
+              />
+            </View>
+            <View style={styles.formButtons}>
+              <Button
+                title="Cancel"
+                onPress={onCancel}
+                style={styles.submitButton}
+              />
+              <Button
+                title="Save"
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              />
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+      )}
+    </Formik>
   );
 };
 

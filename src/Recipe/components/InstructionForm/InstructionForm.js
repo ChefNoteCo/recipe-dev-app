@@ -5,73 +5,67 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 
-const InstructionItem = ({ item, drag, isActive, onDelete }) => {
+const InstructionItem = ({ item, onBlur, onChange, onDelete, style }) => {
   return (
-    <ScaleDecorator>
-      <TouchableOpacity
-        onLongPress={drag}
-        disabled={isActive}
-        style={styles.ingredientItem}
-      >
-        <Text style={styles.ingredientLabel}>{item.label}</Text>
-        <Button
-          icon={<Icon name="close" size={20} />}
-          onPress={() => onDelete(item.id)}
-          style={styles.deleteButton}
-          type="clear"
-        />
-      </TouchableOpacity>
-    </ScaleDecorator>
+    <View style={styles.ingredientField}>
+      <Input
+        placeholder="new instruction"
+        style={styles.ingredientLabel}
+        onChangeText={onChange}
+        onBlur={onBlur}
+        value={item.label}
+        onBlur={onBlur}
+      />
+      <Button
+        icon={<Icon name="close" size={20} />}
+        onPress={onDelete}
+        style={styles.actionButton}
+        type="clear"
+      />
+    </View>
   );
 };
 
 const InstructionForm = ({
   instructions,
-  onAdd,
+  onAddItem,
   onBlur,
-  onDragEnd,
-  onDelete,
-  onFocus,
+  onChange,
+  onDeleteItem,
 }) => {
-  /* 
-    This is an interim state solely to store the data from the input field.
-    It didn't make a lot of sense to try and store it in the parent component
-    when there will only ever be one open input field for an instruction.
-  */
-  const [newInstruction, setNewInstruction] = useState('');
-
-  const saveInstruction = () => {
-    onAdd(newInstruction);
-    setNewInstruction('');
-  };
-
   return (
     <View>
-      <DraggableFlatList
-        data={instructions}
-        keyExtractor={item => `instr_${item.id}`}
-        onDragEnd={onDragEnd}
-        renderItem={props => {
-          return <InstructionItem {...props} onDelete={onDelete} />;
-        }}
-      />
-      <View style={styles.ingredientField}>
-        <Input
-          multiline
-          placeholder="new instruction"
-          style={styles.ingredientLabel}
-          onChangeText={val => setNewInstruction(val)}
-          value={newInstruction}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
+      {instructions.length > 0 ? (
+        <>
+          {instructions.map((instruction, index) => (
+            <View style={styles.ingredientItem}>
+              <InstructionItem
+                item={instruction}
+                onChange={onChange(`instructions.${index}.label`)}
+                onBlur={onBlur(`instructions.${index}.label`)}
+                onDelete={() => {
+                  debugger;
+                  onDeleteItem(index);
+                }}
+                style={styles.ingredientItem}
+              />
+            </View>
+          ))}
+          <Button
+            onPress={onAddItem}
+            type="clear"
+            style={styles.actionButton}
+            title="Add New Instruction"
+          />
+        </>
+      ) : (
         <Button
-          icon={<Icon name="send" size={20} />}
-          onPress={saveInstruction}
+          onPress={onAddItem}
           type="clear"
           style={styles.actionButton}
+          title="Add New Instruction"
         />
-      </View>
+      )}
     </View>
   );
 };
@@ -80,9 +74,6 @@ export default InstructionForm;
 
 const styles = StyleSheet.create({
   ingredientItem: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
     paddingTop: 15,
     paddingBottom: 15,
     borderBottomColor: 'grey',
