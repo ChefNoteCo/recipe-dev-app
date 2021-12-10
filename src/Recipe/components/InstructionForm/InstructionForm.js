@@ -44,7 +44,6 @@ const InstructionForm = ({
                 onChange={onChange(`instructions.${index}.label`)}
                 onBlur={onBlur(`instructions.${index}.label`)}
                 onDelete={() => {
-                  debugger;
                   onDeleteItem(index);
                 }}
                 style={styles.ingredientItem}

@@ -1,31 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import MeasurementUnitPicker from '../../../app/components/MeasurementUnitPicker/MeasurementUnitPicker';
-import FindIngredient from '../FindIngredient/FindIngredient';
+import FindIngredient from '../FindIngredient/FindIngredientNew';
 
-const IngredientField = ({
-  ingredient,
-  ingredientsLoading,
-  onChange,
-  setIngredientModalVisible,
-}) => {
+const IngredientField = ({ allIngredients, ingredient, onChange }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [draftIngredient, setDraftIngredient] = useState(ingredient);
+
+  const setIngredient = valueObject => {
+    const updated = Object.assign({}, draftIngredient, valueObject);
+    setDraftIngredient(updated);
+    onChange(updated);
+  };
+
+  const ingredientName =
+    draftIngredient.name === '' ? (
+      <Button
+        type="clear"
+        title="Choose ingredient..."
+        onPress={() => setShowModal(true)}
+      />
+    ) : (
+      <Text style={styles.ingredientName}>{draftIngredient.name}</Text>
+    );
+
   return (
-    <View key={ingredient.id} style={styles.listItem}>
+    <View key={draftIngredient.id} style={styles.listItem}>
       <TextInput
-        onChangeText={val => {
-          onChange(ingredient, 'quantity', val);
-        }}
+        onChangeText={val => setIngredient({ quantity: val })}
         placeholder="qty"
+        value={draftIngredient.quantity}
         style={styles.quantityInput}
       />
       <MeasurementUnitPicker
         onSelectValue={val => {
-          onChange(ingredient, 'unit', val);
+          /* set draft ingredient unit */
+          setIngredient({ unit: val });
         }}
         style={styles.unitInput}
+        value={ingredient.unit}
       />
-      <Text style={styles.ingredientName}>{ingredient.name}</Text>
+      {ingredientName}
+      {ingredient.name === '' && (
+        <FindIngredient
+          allIngredients={allIngredients}
+          modalVisible={showModal}
+          closeModal={() => setShowModal(false)}
+          modalVisible={showModal}
+          selectedIngredients={[ingredient]}
+          onSelect={val => {
+            /* set draft ingredient id and name */
+            setIngredient(val);
+          }}
+        />
+      )}
     </View>
   );
 };
@@ -34,13 +63,21 @@ const RecipeIngredientForm = ({
   allIngredients,
   selectedIngredients,
   ingredientsLoading,
-  onAddIngredient,
+  onAddItem,
+  onBlur,
   onChange,
-  showModal,
-  toggleModal,
+  onDeleteItem,
 }) => {
-  const currentList = selectedIngredients.map(ingredient => (
-    <IngredientField ingredient={ingredient} onChange={onChange} />
+  const currentList = selectedIngredients.map((ingredient, index) => (
+    <IngredientField
+      allIngredients={allIngredients}
+      ingredient={ingredient}
+      onBlur={onBlur}
+      onChange={val => {
+        onChange(`ingredients.${index}`, val);
+      }}
+      onDelete={() => onDeleteItem(index)}
+    />
   ));
 
   return (
@@ -48,16 +85,9 @@ const RecipeIngredientForm = ({
       {currentList}
       <Button
         title="Add Ingredient"
-        onPress={() => toggleModal(true)}
+        onPress={onAddItem}
         type="clear"
         disabled={ingredientsLoading}
-      />
-      <FindIngredient
-        allIngredients={allIngredients}
-        modalVisible={showModal}
-        closeModal={() => toggleModal(false)}
-        addIngredientFn={onAddIngredient}
-        selectedIngredients={selectedIngredients}
       />
     </View>
   );

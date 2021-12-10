@@ -16,7 +16,7 @@ import {
   addOrRemoveInstructionsToRecipe,
   alreadySelected,
 } from './formManagement';
-import { Instruction } from '../../models';
+import { Ingredient, Instruction } from '../../models';
 
 const RecipeForm = ({
   recipe,
@@ -93,6 +93,7 @@ const RecipeForm = ({
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue,
       }) => (
         <ScrollView style={styles.inputForm}>
           <TouchableOpacity
@@ -131,18 +132,25 @@ const RecipeForm = ({
             </View>
             <View style={styles.ingredientForm}>
               <Text h4>Ingredients</Text>
-              {/* <FieldArray name="ingredients">
-              {({ insert, remove, push }) => (
-                <RecipeIngredientForm
-                  allIngredients={allIngredients}
-                  showModal={showIngredientModal}
-                  toggleModal={setIngredientModal}
-                  selectedIngredients={values.ingredients}
-                  ingredientsLoading={loadingIngredients}
-                  onAddIngredient={push}
-                />
-              )}
-            </FieldArray> */}
+              <FieldArray
+                name="ingredients"
+                render={({ insert, remove, push }) => (
+                  <RecipeIngredientForm
+                    allIngredients={allIngredients}
+                    selectedIngredients={values.ingredients}
+                    showModal={showIngredientModal}
+                    toggleModal={setIngredientModal}
+                    ingredientsLoading={loadingIngredients}
+                    onAddItem={() => {
+                      const defaultIngredient = Ingredient({});
+                      return push(defaultIngredient);
+                    }}
+                    onBlur={(item, value) => setFieldValue(item, value)}
+                    onChange={(item, value) => setFieldValue(item, value)}
+                    onDeleteItem={remove}
+                  />
+                )}
+              />
             </View>
             <View style={instructionStyle}>
               <Text h4>Instructions</Text>

@@ -6,9 +6,14 @@ import convert from '../../../app/helpers/convertUnits';
 const MeasurementUnitPicker = ({ style, value, onSelectValue }) => {
   let allUnits = convert().possibilities();
 
-  if (value) {
-    allUnits = convert().possibilities(value);
-  }
+  // if (value) {
+  //   try {
+  //     allUnits = convert().possibilities(value);
+  //     debugger;
+  //   } catch (err) {
+  //     console.log('Error converting', err.message);
+  //   }
+  // }
 
   const formattedUnits = allUnits.map(unit => {
     return { label: unit, value: unit };
