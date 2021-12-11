@@ -38,7 +38,7 @@ const InstructionForm = ({
       {instructions.length > 0 ? (
         <>
           {instructions.map((instruction, index) => (
-            <View style={styles.ingredientItem}>
+            <View key={instruction.id} style={styles.ingredientItem}>
               <InstructionItem
                 item={instruction}
                 onChange={onChange(`instructions.${index}.label`)}

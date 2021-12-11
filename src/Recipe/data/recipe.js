@@ -19,9 +19,12 @@ class RecipesAPI {
     const recipe = Recipe(data);
     const savePath = `${this.path}/${recipe.id}`;
 
-    await this.db.save(savePath, recipe);
-
-    return recipe;
+    try {
+      const result = await this.db.save(savePath, recipe);
+      return recipe;
+    } catch (err) {
+      console.log('Error saving to the API', err.message);
+    }
   }
 
   /**

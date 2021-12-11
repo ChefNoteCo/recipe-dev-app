@@ -10,12 +10,6 @@ import { Button, Input, Text } from 'react-native-elements';
 import { Formik, FieldArray } from 'formik';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
 import RecipeIngredientForm from '../IngredientForm/IngredientFormNew';
-import MetadataForm from './MetadataForm';
-import {
-  addOrRemoveIngredientsToRecipe,
-  addOrRemoveInstructionsToRecipe,
-  alreadySelected,
-} from './formManagement';
 import { Ingredient, Instruction } from '../../models';
 
 const RecipeForm = ({
@@ -25,76 +19,9 @@ const RecipeForm = ({
   onSave,
   onCancel,
 }) => {
-  const [draftRecipe, setDraftRecipe] = useState(recipe);
-  const [showIngredientModal, setIngredientModal] = useState(false);
-  const [instructionFieldFocused, setInstructionFieldFocused] = useState(false);
-
-  const addIngredientsToRecipe = selectedIngredient => {
-    const updatedRecipe = addOrRemoveIngredientsToRecipe(
-      draftRecipe,
-      selectedIngredient
-    );
-    setRecipeState(updatedRecipe);
-  };
-
-  const addInstructionToRecipe = instructionText => {
-    debugger;
-    const updatedRecipe = addOrRemoveInstructionsToRecipe(draftRecipe, {
-      label: instructionText,
-    });
-    setRecipeState(updatedRecipe);
-  };
-
-  const handleInstructionFocus = isFocused => {
-    setInstructionFieldFocused(isFocused);
-  };
-
-  const removeInstructionFromRecipe = instructionId => {
-    const updatedRecipe = addOrRemoveInstructionsToRecipe(draftRecipe, {
-      id: instructionId,
-    });
-    setRecipeState(updatedRecipe);
-  };
-
-  const updateIngredientInfo = (ingredient, field, value) => {
-    if (!value) {
-      return;
-    }
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    const selected = alreadySelected(updatedRecipe.ingredients, ingredient.id);
-
-    if (selected.alreadySelected) {
-      updatedRecipe.ingredients[selected.index][field] = value;
-    }
-    setRecipeState(updatedRecipe);
-  };
-
-  const updateInstructionOrder = instructions => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe.instructions = instructions.data;
-    setRecipeState(updatedRecipe);
-  };
-
-  const updateRecipeMetadata = (field, value) => {
-    const updatedRecipe = Object.assign({}, draftRecipe);
-    updatedRecipe[field] = value;
-    setRecipeState(updatedRecipe);
-  };
-
-  const instructionStyle = instructionFieldFocused
-    ? styles.instructionFormOnFocus
-    : styles.instructionForm;
   return (
     <Formik initialValues={recipe} onSubmit={values => onSave(values)}>
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldValue,
-      }) => (
+      {({ values, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
         <ScrollView style={styles.inputForm}>
           <TouchableOpacity
             onPress={() => {
@@ -138,8 +65,6 @@ const RecipeForm = ({
                   <RecipeIngredientForm
                     allIngredients={allIngredients}
                     selectedIngredients={values.ingredients}
-                    showModal={showIngredientModal}
-                    toggleModal={setIngredientModal}
                     ingredientsLoading={loadingIngredients}
                     onAddItem={() => {
                       const defaultIngredient = Ingredient({});
@@ -152,7 +77,7 @@ const RecipeForm = ({
                 )}
               />
             </View>
-            <View style={instructionStyle}>
+            <View style={styles.instructionForm}>
               <Text h4>Instructions</Text>
               <FieldArray
                 name="instructions"

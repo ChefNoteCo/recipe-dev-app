@@ -71,6 +71,7 @@ const RecipeIngredientForm = ({
   const currentList = selectedIngredients.map((ingredient, index) => (
     <IngredientField
       allIngredients={allIngredients}
+      key={ingredient.id}
       ingredient={ingredient}
       onBlur={onBlur}
       onChange={val => {

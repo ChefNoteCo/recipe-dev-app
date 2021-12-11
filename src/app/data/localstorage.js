@@ -73,16 +73,11 @@ class LocalStorage {
         dataToOverwrite = savedItemsAtPath ? JSON.parse(savedItemsAtPath) : {};
         dataToOverwrite[deconstructed.id] = data;
       }
-      const result = await AsyncStorage.setItem(
+      await AsyncStorage.setItem(
         deconstructed.path,
         JSON.stringify(dataToOverwrite)
       );
-
-      if (this.parser.saveParse) {
-        return this.parser.saveParse(result, arguments);
-      } else {
-        return result;
-      }
+      return data;
     } catch (e) {
       console.log('Error saving data', e);
     }

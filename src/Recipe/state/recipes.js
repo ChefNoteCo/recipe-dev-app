@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import recipesData from '../data/recipe';
 import { sortAscending, sortDescending } from '../../app/helpers/sortOrder';
 import { BaseRecipe } from '../../app/models';
@@ -12,13 +12,16 @@ const initialState = {
     loading: true,
     data: BaseRecipe({}),
   },
+  save: {
+    loading: false,
+  },
 };
 
 export const saveRecipe = createAsyncThunk(
   'recipes/saveRecipes',
   async data => {
-    const response = await recipesData.save(data);
-    return response;
+    const recipe = await recipesData.save(data);
+    return recipe;
   }
 );
 
@@ -87,13 +90,18 @@ export const recipeSlice = createSlice({
     builder.addCase(saveRecipe.pending, (state, action) => {
       state.loading = true;
     });
-
     builder.addCase(saveRecipe.fulfilled, (state, action) => {
-      state.all.push(action.payload);
-      if (state.recent.length === MAX_RECENT_LENGTH) {
-        state.recent.shift();
+      const currentState = current(state);
+      const recipeId = action.payload.id;
+      const existing = currentState.all.findIndex(i => {
+        return i.id === recipeId;
+      });
+      if (existing === -1) {
+        state.all.push(action.payload);
+      } else {
+        state.all[existing] = action.payload;
       }
-      state.recent.push(action.payload);
+
       state.loading = false;
     });
   },
