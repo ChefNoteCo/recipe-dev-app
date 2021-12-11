@@ -12,9 +12,6 @@ const initialState = {
     loading: true,
     data: BaseRecipe({}),
   },
-  save: {
-    loading: false,
-  },
 };
 
 export const saveRecipe = createAsyncThunk(

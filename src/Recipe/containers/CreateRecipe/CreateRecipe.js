@@ -11,7 +11,7 @@ const CreateRecipe = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const ingredients = useSelector(state => state.ingredients.all);
   const ingredientLoading = useSelector(state => state.ingredients.loading);
-  const saveLoading = useSelector(state => state.save.loading);
+  const loading = useSelector(state => state.loading);
 
   const defaultRecipe = Recipe({});
 
@@ -23,17 +23,17 @@ const CreateRecipe = ({ navigation, route }) => {
 
   const saveNewRecipe = editedRecipe => {
     dispatch(saveRecipe(editedRecipe)).then(() => {
-      navigation.navigate('RecipeDetail', { id: editedRecipe.id });
+      navigation.navigate('ViewRecipe', { id: editedRecipe.id });
     });
   };
 
   return (
-    <LoadingScreen loading={ingredientLoading || saveLoading}>
+    <LoadingScreen loading={ingredientLoading || loading}>
       <RecipeForm
         allIngredients={ingredients}
         recipe={defaultRecipe}
         onSave={saveNewRecipe}
-        onCancel={() => navigation.navigate('RecipeDetail', { id: recipeId })}
+        onCancel={() => navigation.navigate('ViewRecipe', { id: recipeId })}
       />
     </LoadingScreen>
   );

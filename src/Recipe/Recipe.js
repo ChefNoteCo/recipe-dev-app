@@ -26,7 +26,7 @@ export default function Recipe() {
       />
       <Stack.Screen name="CreateRecipe" component={CreateRecipe} />
       <Stack.Screen name="EditRecipe" component={EditRecipe} />
-      <Stack.Screen name="RecipeDetail" component={RecipeDetail} />
+      <Stack.Screen name="ViewRecipe" component={RecipeDetail} />
     </Stack.Navigator>
   );
 }

@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Icon, Input, Text } from 'react-native-elements';
-import DraggableFlatList, {
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Button, Icon, Input } from 'react-native-elements';
 
 const InstructionItem = ({ item, onBlur, onChange, onDelete, style }) => {
   return (
@@ -38,7 +35,7 @@ const InstructionForm = ({
       {instructions.length > 0 ? (
         <>
           {instructions.map((instruction, index) => (
-            <View key={instruction.id} style={styles.ingredientItem}>
+            <View key={instruction.id} style={styles.instructionItem}>
               <InstructionItem
                 item={instruction}
                 onChange={onChange(`instructions.${index}.label`)}
@@ -46,7 +43,7 @@ const InstructionForm = ({
                 onDelete={() => {
                   onDeleteItem(index);
                 }}
-                style={styles.ingredientItem}
+                style={styles.instructionItem}
               />
             </View>
           ))}
@@ -72,22 +69,22 @@ const InstructionForm = ({
 export default InstructionForm;
 
 const styles = StyleSheet.create({
-  ingredientItem: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
+  instructionItem: {
+    paddingTop: 8,
     fontSize: 15,
   },
   ingredientField: {
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
-    paddingTop: 15,
-    paddingBottom: 10,
+    paddingTop: 8,
   },
   ingredientLabel: {
+    padding: 5,
+    fontSize: 15,
     flex: 3,
+    margin: 0,
+    paddingTop: 0,
   },
   actionButton: {
     flex: 1,

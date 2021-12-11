@@ -9,7 +9,7 @@ import {
 import { Button, Input, Text } from 'react-native-elements';
 import { Formik, FieldArray } from 'formik';
 import InstructionForm from '../../components/InstructionForm/InstructionForm';
-import RecipeIngredientForm from '../IngredientForm/IngredientFormNew';
+import RecipeIngredientForm from '../IngredientForm/IngredientForm';
 import { Ingredient, Instruction } from '../../models';
 
 const RecipeForm = ({

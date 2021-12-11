@@ -26,7 +26,7 @@ const EditRecipe = ({ navigation, route }) => {
 
   const saveNewRecipe = editedRecipe => {
     dispatch(saveRecipe(editedRecipe)).then(() => {
-      navigation.navigate('RecipeDetail', { id: editedRecipe.id });
+      navigation.navigate('ViewRecipe', { id: editedRecipe.id });
     });
   };
 
@@ -36,7 +36,7 @@ const EditRecipe = ({ navigation, route }) => {
         allIngredients={ingredients}
         recipe={recipe}
         onSave={saveNewRecipe}
-        onCancel={() => navigation.navigate('RecipeDetail', { id: recipeId })}
+        onCancel={() => navigation.navigate('ViewRecipe', { id: recipeId })}
       />
     </LoadingScreen>
   );
