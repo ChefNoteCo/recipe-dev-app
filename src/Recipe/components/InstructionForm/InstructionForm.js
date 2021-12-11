@@ -1,77 +1,67 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Icon, Input, Text } from 'react-native-elements';
-import DraggableFlatList, {
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Button, Icon, Input } from 'react-native-elements';
 
-const InstructionItem = ({ item, drag, isActive, onDelete }) => {
+const InstructionItem = ({ item, onBlur, onChange, onDelete, style }) => {
   return (
-    <ScaleDecorator>
-      <TouchableOpacity
-        onLongPress={drag}
-        disabled={isActive}
-        style={styles.ingredientItem}
-      >
-        <Text style={styles.ingredientLabel}>{item.label}</Text>
-        <Button
-          icon={<Icon name="close" size={20} />}
-          onPress={() => onDelete(item.id)}
-          style={styles.deleteButton}
-          type="clear"
-        />
-      </TouchableOpacity>
-    </ScaleDecorator>
+    <View style={styles.ingredientField}>
+      <Input
+        placeholder="new instruction"
+        style={styles.ingredientLabel}
+        onChangeText={onChange}
+        onBlur={onBlur}
+        value={item.label}
+        onBlur={onBlur}
+      />
+      <Button
+        icon={<Icon name="close" size={20} />}
+        onPress={onDelete}
+        style={styles.actionButton}
+        type="clear"
+      />
+    </View>
   );
 };
 
 const InstructionForm = ({
   instructions,
-  onAdd,
+  onAddItem,
   onBlur,
-  onDragEnd,
-  onDelete,
-  onFocus,
+  onChange,
+  onDeleteItem,
 }) => {
-  /* 
-    This is an interim state solely to store the data from the input field.
-    It didn't make a lot of sense to try and store it in the parent component
-    when there will only ever be one open input field for an instruction.
-  */
-  const [newInstruction, setNewInstruction] = useState('');
-
-  const saveInstruction = () => {
-    onAdd(newInstruction);
-    setNewInstruction('');
-  };
-
   return (
     <View>
-      <DraggableFlatList
-        data={instructions}
-        keyExtractor={item => `instr_${item.id}`}
-        onDragEnd={onDragEnd}
-        renderItem={props => {
-          return <InstructionItem {...props} onDelete={onDelete} />;
-        }}
-      />
-      <View style={styles.ingredientField}>
-        <Input
-          multiline
-          placeholder="new instruction"
-          style={styles.ingredientLabel}
-          onChangeText={val => setNewInstruction(val)}
-          value={newInstruction}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
+      {instructions.length > 0 ? (
+        <>
+          {instructions.map((instruction, index) => (
+            <View key={instruction.id} style={styles.instructionItem}>
+              <InstructionItem
+                item={instruction}
+                onChange={onChange(`instructions.${index}.label`)}
+                onBlur={onBlur(`instructions.${index}.label`)}
+                onDelete={() => {
+                  onDeleteItem(index);
+                }}
+                style={styles.instructionItem}
+              />
+            </View>
+          ))}
+          <Button
+            onPress={onAddItem}
+            type="clear"
+            style={styles.actionButton}
+            title="Add New Instruction"
+          />
+        </>
+      ) : (
         <Button
-          icon={<Icon name="send" size={20} />}
-          onPress={saveInstruction}
+          onPress={onAddItem}
           type="clear"
           style={styles.actionButton}
+          title="Add New Instruction"
         />
-      </View>
+      )}
     </View>
   );
 };
@@ -79,25 +69,22 @@ const InstructionForm = ({
 export default InstructionForm;
 
 const styles = StyleSheet.create({
-  ingredientItem: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderBottomColor: 'grey',
-    borderBottomWidth: 1,
+  instructionItem: {
+    paddingTop: 8,
     fontSize: 15,
   },
   ingredientField: {
     display: 'flex',
     justifyContent: 'space-around',
     flexDirection: 'row',
-    paddingTop: 15,
-    paddingBottom: 10,
+    paddingTop: 8,
   },
   ingredientLabel: {
+    padding: 5,
+    fontSize: 15,
     flex: 3,
+    margin: 0,
+    paddingTop: 0,
   },
   actionButton: {
     flex: 1,

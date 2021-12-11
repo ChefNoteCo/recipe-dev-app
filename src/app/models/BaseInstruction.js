@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid/non-secure';
 
-const Instruction = ({ id = nanoid(), label = '', order }) => {
+const BaseInstruction = ({ id = nanoid(), label, order }) => {
   return {
     id,
     label,
@@ -8,4 +8,4 @@ const Instruction = ({ id = nanoid(), label = '', order }) => {
   };
 };
 
-export default Instruction;
+export default BaseInstruction;

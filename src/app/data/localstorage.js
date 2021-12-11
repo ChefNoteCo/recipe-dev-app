@@ -7,9 +7,7 @@ class LocalStorage {
 
   _parsePath(providedPath) {
     const URL_ROUTE_DELIMITER = '/';
-    console.log('providedPath', providedPath);
     const parts = providedPath.split(URL_ROUTE_DELIMITER);
-    console.log('parts', parts);
     return { path: parts[0], id: parts[1] };
   }
   async add(data) {
@@ -38,7 +36,9 @@ class LocalStorage {
       if (this.parser.getParse) {
         return this.parser.getParse(value, arguments);
       } else {
-        return value != null ? JSON.parse(value) : null;
+        const jsonData = JSON.parse(value);
+
+        return jsonData[id];
       }
     } catch (e) {
       console.log('Error getting data');
@@ -73,16 +73,11 @@ class LocalStorage {
         dataToOverwrite = savedItemsAtPath ? JSON.parse(savedItemsAtPath) : {};
         dataToOverwrite[deconstructed.id] = data;
       }
-      const result = await AsyncStorage.setItem(
+      await AsyncStorage.setItem(
         deconstructed.path,
         JSON.stringify(dataToOverwrite)
       );
-
-      if (this.parser.saveParse) {
-        return this.parser.saveParse(result, arguments);
-      } else {
-        return result;
-      }
+      return data;
     } catch (e) {
       console.log('Error saving data', e);
     }

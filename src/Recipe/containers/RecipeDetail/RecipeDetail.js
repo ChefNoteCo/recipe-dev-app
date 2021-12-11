@@ -1,33 +1,45 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { StyleSheet, Text, View } from 'react-native';
 import RecipeMetadata from '../../components/RecipeMetadata/RecipeMetadata';
 import { RecipeIngredientList } from '../../components/RecipeIngredientList/RecipeIngredientList';
 import { RecipeInstructionList } from '../../components/RecipeInstructionList/RecipeInstructionList';
+import EditRecipeButton from '../../components/EditRecipeButton/EditRecipeButton';
+import LoadingScreen from '../../../app/components/LoadingScreen/LoadingScreen';
+import { fetchRecipe } from '../../state/recipes';
 
-const RecipeDetail = ({ navigation, route }) => {
-  const recipes = useSelector(state => state.recipes);
-
-  // TODO: Use Thunk to get the specific recipe detail from storage
-  // Currently state.recipes is an array, not an object so need to get it from storage
-  // where it is in the appropriate shape
+const ViewRecipe = ({ navigation, route }) => {
   const recipeId = route.params.id;
-  const recipeDetails = recipes.all.filter(recipe => {
-    return recipe.id === recipeId;
-  });
-  const recipeDetail = recipeDetails[0];
+  const dispatch = useDispatch();
+  const recipe = useSelector(state => state.recipes.detail.data);
+  const recipeLoading = useSelector(state => state.recipes.detail.loading);
 
-  if (recipes.loading) {
-    return <Text>Loading...</Text>;
-  }
+  useEffect(() => {
+    if (recipeLoading || recipe.id !== recipeId) {
+      dispatch(fetchRecipe(recipeId));
+    }
+  });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <EditRecipeButton
+          onPress={() => navigation.navigate('EditRecipe', { id: recipeId })}
+        />
+      ),
+    });
+  }, [navigation]);
+
   return (
-    <View style={styles.recipeDetail}>
-      <RecipeMetadata recipe={recipeDetail} />
-      <View style={styles.recipeInstructions}>
-        <RecipeIngredientList ingredients={recipeDetail.ingredients} />
-        <RecipeInstructionList instructions={recipeDetail.instructions} />
+    <LoadingScreen loading={recipeLoading}>
+      <View style={styles.recipeDetail}>
+        <RecipeMetadata recipe={recipe} />
+        <View style={styles.recipeInstructions}>
+          <RecipeIngredientList ingredients={recipe.ingredients} />
+          <RecipeInstructionList instructions={recipe.instructions} />
+        </View>
       </View>
-    </View>
+    </LoadingScreen>
   );
 };
 
@@ -41,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecipeDetail;
+export default ViewRecipe;

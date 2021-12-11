@@ -11,7 +11,7 @@ const RecipeList = ({ title, recipes, navigateFn }) => {
         return (
           <RecipeListItem
             recipe={item}
-            onPress={() => navigateFn('RecipeDetail', { id: item.id })}
+            onPress={() => navigateFn('ViewRecipe', { id: item.id })}
           />
         );
       }}

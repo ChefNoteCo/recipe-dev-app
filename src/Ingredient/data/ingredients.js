@@ -27,7 +27,7 @@ class IngredientsAPI {
         return JSON.parse(data);
       },
       listParse: (data, args) => {
-        console.log('data', data);
+        console.log('ingredient data', data);
         if (data) {
           const parsedData = JSON.parse(data);
           const keys = Object.keys(parsedData);
