@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { Button, Icon, Text } from 'react-native-elements';
 import MeasurementUnitPicker from '../../../app/components/MeasurementUnitPicker/MeasurementUnitPicker';
 import FindIngredient from '../FindIngredient/FindIngredientNew';
 
-const IngredientField = ({ allIngredients, ingredient, onChange }) => {
+const IngredientField = ({
+  allIngredients,
+  ingredient,
+  onChange,
+  onDelete,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [draftIngredient, setDraftIngredient] = useState(ingredient);
 
@@ -42,6 +47,12 @@ const IngredientField = ({ allIngredients, ingredient, onChange }) => {
         value={ingredient.unit}
       />
       {ingredientName}
+      <Button
+        icon={<Icon name="close" size={20} />}
+        onPress={onDelete}
+        style={styles.actionButton}
+        type="clear"
+      />
       {ingredient.name === '' && (
         <FindIngredient
           allIngredients={allIngredients}
